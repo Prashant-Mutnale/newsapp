@@ -13,6 +13,7 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
+  BackHandler
 } from 'react-native';
 import {connect} from 'react-redux'
 import {fetchPosts} from '../redux/actions/postActions.js';
@@ -21,6 +22,11 @@ let innerdata
 class Register extends Component {
     // componentWillMount(){
     //     this.props.fetchPosts()
+    // }
+    // componentWillMount(){
+    //     BackHandler.addEventListener('hardwareBackPress', function() {
+    //         Actions.Posts()
+    //       });
     // }
   render() {
       console.log("routeddata",this.props.iddata)

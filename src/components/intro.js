@@ -13,7 +13,9 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
-  BackHandler
+  BackHandler,
+  Navigator,
+  Alert
 } from 'react-native';
 import {connect} from 'react-redux'
 import {fetchPosts} from '../redux/actions/postActions.js';
@@ -21,20 +23,67 @@ import { Actions } from 'react-native-router-flux';
 class Intro extends Component {
     constructor(props){
         super(props)
-        this.handleBackButton = this.handleBackButton.bind(this)
+        // this.handleBackButton = this.handleBackButton.bind(this)
+        // this.resetapp = this.resetapp.bind(this)
     }
-    componentDidMount() {
-        BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-      }
+    // componentDidMount() {
+    //     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    //   }
+    //   componentWillUnmount() {
+    //     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    //   }
+    //   handleBackButton() {
+    //       if(this.props.signdetect == "true"){
+    //         return false;
+    //         console.log("clicked")
+    //         alert("exit the app")
+             
+    //       }
+    //       else{
+    //           return true
+    //       }
+    //     }
+        // resetapp(){
+        //     BackHandler.exitApp()
+        // }
+    // componentDidMount() {
+    //     BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    //   }
       
-      componentWillUnmount() {
-        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-      }
-      handleBackButton() {
-            return true
-      }
+    //   componentWillUnmount() {
+    //     BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    //   }
+    //   handleBackButton() {
+    //       console.log("git back")
+    //       if(this.props.signdetect == "true"){
+    //         return false
+    //         // console.log("clicked")
+    //         //         Alert.alert(
+    //         //             'Exit',
+    //         //              'Do you want to exit the app', [{
+    //         //                  text: 'Cancel',
+    //         //                  onPress: () => console.log('Cancel Pressed'),
+    //         //                  style: 'cancel'
+    //         //              }, {
+    //         //                  text: 'OK',
+    //         //                  onPress: () => this.resetapp()
+                           
+    //         //              }, ], {
+    //         //                  cancelable: false
+    //         //              }
+    //         //       )
+    //       }
+    //       else{
+    //           return true
+    //       }
+           
+    //   }
+    //   resetapp(){
+    //         BackHandler.exitApp()
+    //         // Actions.splash({type:'reset'})
+    //       }
   render() {
-     
+    //  console.log("propsdata", this.props.signdetect)
     return (
       
        <View style={{

@@ -13,8 +13,8 @@ public class MainActivity extends ReactActivity {
     protected String getMainComponentName() {
         return "newsapp";
     }
-    @Override
-   public void onNewIntent(Intent intent) {
+@Override
+    public void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
     }

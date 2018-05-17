@@ -27,71 +27,71 @@ import Intro from './src/components/intro'
 import Login from './src/components/login'
 import Signup from './src/components/signup'
 import Category from './src/components/category'
-// import {firebaseRef} from './src/services/Firebase.js'
+import {firebaseRef} from './src/services/Firebase.js'
 import Toast from 'react-native-simple-toast';
 import category from './src/components/category';
 import Splash from './src/components/splash';
 const thisClass = this; 
 export default class App extends Component{
-  componentDidMount() {
-    FCM.requestPermissions();
+  // componentDidMount() {
+  //   FCM.requestPermissions();
 
-    FCM.getFCMToken().then(token => {
-      console.log("TOKEN (getFCMToken)", token);
-    });
-    FCM.getInitialNotification().then(notif => {
-      console.log("INITIAL NOTIFICATION", notif)
-    });
-    this.notificationListner = FCM.on(FCMEvent.Notification, notif => {
-      console.log("Notification", notif);
-      if(notif.local_notification){
-        return;
-      }
-      if(notif.opened_from_tray){
-        return;
-      }
+  //   FCM.getFCMToken().then(token => {
+  //     console.log("TOKEN (getFCMToken)", token);
+  //   });
+  //   FCM.getInitialNotification().then(notif => {
+  //     console.log("INITIAL NOTIFICATION", notif)
+  //   });
+  //   this.notificationListner = FCM.on(FCMEvent.Notification, notif => {
+  //     console.log("Notification", notif);
+  //     if(notif.local_notification){
+  //       return;
+  //     }
+  //     if(notif.opened_from_tray){
+  //       return;
+  //     }
 
-      if(Platform.OS ==='ios'){
-              //optional
-              //iOS requires developers to call completionHandler to end notification process. If you do not call it your background remote notifications could be throttled, to read more about it see the above documentation link.
-              //This library handles it for you automatically with default behavior (for remote notification, finish with NoData; for WillPresent, finish depend on "show_in_foreground"). However if you want to return different result, follow the following code to override
-              //notif._notificationType is available for iOS platfrom
-              switch(notif._notificationType){
-                case NotificationType.Remote:
-                  notif.finish(RemoteNotificationResult.NewData) //other types available: RemoteNotificationResult.NewData, RemoteNotificationResult.ResultFailed
-                  break;
-                case NotificationType.NotificationResponse:
-                  notif.finish();
-                  break;
-                case NotificationType.WillPresent:
-                  notif.finish(WillPresentNotificationResult.All) //other types available: WillPresentNotificationResult.None
-                  break;
-              }
-            }
-      this.showLocalNotification(notif);
-    });
+  //     if(Platform.OS ==='ios'){
+  //             //optional
+  //             //iOS requires developers to call completionHandler to end notification process. If you do not call it your background remote notifications could be throttled, to read more about it see the above documentation link.
+  //             //This library handles it for you automatically with default behavior (for remote notification, finish with NoData; for WillPresent, finish depend on "show_in_foreground"). However if you want to return different result, follow the following code to override
+  //             //notif._notificationType is available for iOS platfrom
+  //             switch(notif._notificationType){
+  //               case NotificationType.Remote:
+  //                 notif.finish(RemoteNotificationResult.NewData) //other types available: RemoteNotificationResult.NewData, RemoteNotificationResult.ResultFailed
+  //                 break;
+  //               case NotificationType.NotificationResponse:
+  //                 notif.finish();
+  //                 break;
+  //               case NotificationType.WillPresent:
+  //                 notif.finish(WillPresentNotificationResult.All) //other types available: WillPresentNotificationResult.None
+  //                 break;
+  //             }
+  //           }
+  //     this.showLocalNotification(notif);
+  //   });
 
-    this.refreshTokenListener = FCM.on(FCMEvent.RefreshToken, token => {
-      console.log("TOKEN (refreshUnsubscribe)", token);
-    });
-  }
-  showLocalNotification(notif) {
-    FCM.presentLocalNotification({
-      title: notif.title,
-      body: notif.body,
-      priority: "high",
-      click_action: notif.click_action,
-      show_in_foreground: true,
-      local: true,
-      wake_screen: true,
-      show_in_foreground = true
-    });
-  }
+  //   this.refreshTokenListener = FCM.on(FCMEvent.RefreshToken, token => {
+  //     console.log("TOKEN (refreshUnsubscribe)", token);
+  //   });
+  // }
+  // showLocalNotification(notif) {
+  //   FCM.presentLocalNotification({
+  //     title: notif.title,
+  //     body: notif.body,
+  //     priority: "high",
+  //     click_action: notif.click_action,
+  //     show_in_foreground: true,
+  //     local: true,
+  //     wake_screen: true,
+  //     show_in_foreground : true
+  //   });
+  // }
 
-  componentWillUnmount() {
-    this.notificationListner.remove();
-    this.refreshTokenListener.remove();
-  }
+  // componentWillUnmount() {
+  //   this.notificationListner.remove();
+  //   this.refreshTokenListener.remove();
+  // }
   constructor(props){
     super(props)
     this.state = {
@@ -107,7 +107,10 @@ export default class App extends Component{
     firebaseRef.auth().signOut().then(function(user) {
       // Sign-out successful
 
-      Actions.login({signdetect: 'true'})
+      Actions.intro({signdetect: 'true'})
+      this.setState({
+        signdisable: true
+      })
      
     
       // console.log(user)
@@ -116,9 +119,6 @@ export default class App extends Component{
       // An error happened.
     });
     console.log("disablstate",this.state.signdisable)
-    this.setState({
-      signdisable: true
-    })
   }
 
   // onBackFunction(){
@@ -130,11 +130,11 @@ export default class App extends Component{
   //   }
   // }
   render() {
-    console.log("signoutinitial",this.state.signdisable)
+    // console.log("signoutinitial",this.state.signdisable)
     const scenes = Actions.create(
       <Scene key="root">
-       <Scene  navigationBarStyle={{backgroundColor: '#fff', borderWidth: 0, borderColor: '#fff',}} key="splash" component={Splash}  hideNavBar={true} initial/>
-        <Scene navigationBarStyle={{backgroundColor: '#fff', borderWidth: 0, borderColor: '#fff',}} key="intro" component={Intro} title = "Welcome" renderBackButton={()=><View/>}  gesturesEnabled= {false}/>
+       {/* <Scene  navigationBarStyle={{backgroundColor: '#fff', borderWidth: 0, borderColor: '#fff',}} key="splash" component={Splash}  hideNavBar={true}/> */}
+        <Scene navigationBarStyle={{backgroundColor: '#fff', borderWidth: 0, borderColor: '#fff',}} key="intro" component={Intro} title = "Welcome" renderBackButton={()=><View/>}  gesturesEnabled= {false} initial/>
         <Scene navigationBarStyle={{backgroundColor: '#fff', borderWidth: 0, borderColor: '#fff',}} key="login" component={Login} title = "Login"  backTitle = "Back" renderBackButton={()=>this.state.signdisable?<View/>:null}/>
         <Scene navigationBarStyle={{backgroundColor: '#fff', borderWidth: 0, borderColor: '#fff',}} key="signup" component={Signup} title = "Sign up" backTitle = "Back" />
         <Scene navigationBarStyle={{backgroundColor: '#fff', borderWidth: 0, borderColor: '#fff',}} key="newsList" component={newsList} rightTitle = {"SomeIconComponent"}  title = "News Channels"  rightTitle='Sign out' onRight={this._signout} renderBackButton={()=><View/>}/>

@@ -30,24 +30,46 @@ class newsList extends Component {
             prevPath: ''
         }
         // this.handleBackButtonClick = this.handleBackButtonClick.bind(this)
+        this.handleBackButton = this.handleBackButton.bind(this)
         // this.getData = this.getData.bind(this)
     }
-    componentWillReceiveProps(nextProps) {
-      console.log("statprops",nextProps)
-      if (nextProps.routeName == "newsList") {
-        this.setState({ prevPath: nextProps.routeName })
-      }
-    }
-    componentDidMount() {
-      BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-    }
-    
+
     componentWillUnmount() {
+      console.log('unMount');
       BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
     }
-    handleBackButton() {
-      return true
+    componentDidMount() {
+      console.log('Mount');
+      BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
     }
+    handleBackButton() {
+      // if(this.props.datachange == "idchange"){
+      //   console.log("entered")
+      // BackHandler.exitApp()
+       console.log("stateaction",Actions.state.index)
+      return true
+      // if(Actions.state.index==3){
+      //   BackHandler.exitApp()
+      // }
+    }
+    // code for toast
+    // if(this.state.initialstate === 1){
+    //   console.log("foundinitialstates",this.state.initialstate)
+    //   BackHandler.exitApp()
+    // }
+    // else{
+    //   Toast.show("please tap to close")
+    //   console.log("foundinitial",this.state.initialstate)
+    //   this.setState({
+    //     initialstate : 1
+    //   })
+    //   return true
+    // }
+      // code for toast
+    // else{
+    //   BackHandler.exitApp()
+    //   return false
+    // }
   //  componentWillMount() {
   //     var user = firebaseRef.auth().currentUser;
 
@@ -89,6 +111,7 @@ class newsList extends Component {
   render() {
     // console.log("initialsstata",this.state.prevPatch)
     //  console.log("datafoundcat", this.props.newsids)
+    console.log("newslistback", this.props.datachange)
     return (
         <ScrollView>
       <View style={styles.container}>

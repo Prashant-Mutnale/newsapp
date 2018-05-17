@@ -12,7 +12,8 @@ import {
   View,
   TouchableOpacity,
   ScrollView,
-  Image
+  Image,
+  BackHandler
 } from 'react-native';
 import {connect} from 'react-redux'
 import {fetchPosts} from '../redux/actions/postActions.js';
@@ -32,13 +33,29 @@ class Posts extends Component {
         }
         // this.getData = this.getData.bind(this)
     }
-    
-    componentWillMount(){
+    componentWillUnmount() {
+      console.log('unMount');
+      BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+    }
+    componentDidMount() {
+      console.log('Mount');
+      BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
+    }
+
+    handleBackButton() {
+      Actions.pop()
+      console.log("stateaction",Actions.state.index)
+      return true
+  }
+    // componentWillMount(){
+    //   BackHandler.addEventListener('hardwareBackPress', function() {
+    //     Actions.newsList()
+    //   });
         // this.props.fetchPosts()
         // this.setState({
         //     datalist: this.props.postdata.articles
         // })
-    }
+
     // _onScroll(e){
     //     var contentOffset = e.nativeEvent.contentOffset.y;
     //     this.state.contentOffsetY < contentOffset ? console.log("Scroll Down") : console.log("Scroll Up");
@@ -49,6 +66,7 @@ class Posts extends Component {
     }
   render() {
     console.log("sendid", this.props.sendid)
+    console.log("nechangeid", this.props.idchange)
     //   console.log("sdsd",this.state.datalist)
       if(this.props.postdata.articles !=="" || this.props.postdata!==undefined){
         console.log("newsdata", this.props.postdata.articles)
@@ -60,7 +78,7 @@ class Posts extends Component {
       <View style={styles.container}>
         
          {
-             newslist ==="" || newslist== undefined ? <Spinner style={styles.spinner} isVisible={this.state.isVisible} size={this.state.size} type={this.state.types} color={this.state.color}/>:
+             newslist ==="" || newslist== undefined ? null :
            
             Object.values(newslist).map((items, i ) => {
                 return(

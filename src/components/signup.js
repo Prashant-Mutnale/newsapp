@@ -13,14 +13,18 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
-  TextInput
+  TextInput,
+  BackHandler,
 } from 'react-native';
 import {connect} from 'react-redux'
 import {fetchPosts} from '../redux/actions/postActions.js';
 import { Actions } from 'react-native-router-flux';
 import {firebaseRef} from '../services/Firebase'
 import Toast from 'react-native-simple-toast';
+import FCM, {FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType} from "react-native-fcm";
+let mobiletoken = ""
 class Signup extends Component {
+
  constructor(props){
      super(props)
      this.state = {
@@ -31,6 +35,68 @@ class Signup extends Component {
      }
      this._register = this._register.bind(this)
  }
+ 
+ componentDidMount(){
+  FCM.requestPermissions();
+
+  FCM.getFCMToken().then(token => {
+    console.log("TOKEN (getFCMToken)", token);
+    mobiletoken = token
+    console.log("mobilegot",mobiletoken)
+  });
+  FCM.getInitialNotification().then(notif => {
+    console.log("INITIAL NOTIFICATION", notif)
+  });
+  this.notificationListner = FCM.on(FCMEvent.Notification, notif => {
+    console.log("Notification", notif);
+    if(notif.local_notification){
+      return;
+    }
+    if(notif.opened_from_tray){
+      return;
+    }
+
+    if(Platform.OS ==='ios'){
+            //optional
+            //iOS requires developers to call completionHandler to end notification process. If you do not call it your background remote notifications could be throttled, to read more about it see the above documentation link.
+            //This library handles it for you automatically with default behavior (for remote notification, finish with NoData; for WillPresent, finish depend on "show_in_foreground"). However if you want to return different result, follow the following code to override
+            //notif._notificationType is available for iOS platfrom
+            switch(notif._notificationType){
+              case NotificationType.Remote:
+                notif.finish(RemoteNotificationResult.NewData) //other types available: RemoteNotificationResult.NewData, RemoteNotificationResult.ResultFailed
+                break;
+              case NotificationType.NotificationResponse:
+                notif.finish();
+                break;
+              case NotificationType.WillPresent:
+                notif.finish(WillPresentNotificationResult.All) //other types available: WillPresentNotificationResult.None
+                break;
+            }
+          }
+    this.showLocalNotification(notif);
+  });
+
+  this.refreshTokenListener = FCM.on(FCMEvent.RefreshToken, token => {
+    console.log("TOKEN (refreshUnsubscribe)", token);
+  });
+ }
+ showLocalNotification(notif) {
+  FCM.presentLocalNotification({
+    title: notif.title,
+    body: notif.body,
+    priority: "high",
+    click_action: notif.click_action,
+    show_in_foreground: true,
+    local: true,
+    wake_screen: true,
+    show_in_foreground : true
+  });
+}
+componentWillUnmount() {
+  this.notificationListner.remove();
+  this.refreshTokenListener.remove();
+  BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
+}
  _register(){
    if(this.state.password == this.state.verifypassword){
     firebaseRef.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
@@ -38,6 +104,28 @@ class Signup extends Component {
       console.log(response)
       Toast.show("successfully Registered")
       Actions.newsList()
+      fetch('https://fcm.googleapis.com/fcm/send', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'key=AIzaSyCyFR32KamcpbxE7_91TbAZ-PBf3pdIYCM'
+        },
+        body: JSON.stringify({
+            "to": mobiletoken,
+            "data": {
+                "custom_notification": {
+                "body": "News",
+                "title": "Thanks for signing up",
+                "color":"#00ACD4",
+                "priority":"high",
+                "group": "GROUP",
+                "sound": "default",
+                "id": "id",
+                "show_in_foreground": true
+                }
+            }
+        })
+    })
     })
     .catch(function(error) {
       // Handle Errors here.
@@ -60,6 +148,7 @@ class Signup extends Component {
    else{
     Toast.show("Password did not match")
    }
+
 
  }
   render() {

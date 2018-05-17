@@ -25,6 +25,7 @@ import { Actions } from 'react-native-router-flux';
 import {firebaseRef} from '../services/Firebase'
 import Modal from "react-native-modal";
 import Toast from 'react-native-simple-toast';
+import FCM, {FCMEvent, RemoteNotificationResult, WillPresentNotificationResult, NotificationType} from "react-native-fcm";
 let email =''
 class Login extends Component {
  constructor(props){
@@ -40,7 +41,7 @@ class Login extends Component {
      }
      this._login = this._login.bind(this)
      this.changeeye = this.changeeye.bind(this)
-     this.handleBackButton = this.handleBackButton.bind(this)
+    //  this.handleBackButton = this.handleBackButton.bind(this)
     //  this.resetapp = this.resetapp.bind(this)
     //  this._forgot = this._forgot.bind(this)
  }
@@ -53,42 +54,12 @@ class Login extends Component {
 //  componentWillMount(){
 //     StatusBar.setHidden(false);
 //  }
- componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-  }
-  
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-  }
-  
-  handleBackButton() {
-      if(this.props.signdetect == "true"){
-        return true;
-        console.log("clicked")
-        // Alert.alert(
-        //     'Exit',
-        //     'Do you want to exit the app', [{
-        //         text: 'Cancel',
-        //         onPress: () => console.log('Cancel Pressed'),
-        //         style: 'cancel'
-        //     }, {
-        //         text: 'OK',
-        //         onPress: () => this.resetapp()
-               
-        //     }, ], {
-        //         cancelable: false
-        //     }
-        //  )
-         
-      }
-      else{
-          return false
-      }
-    //   return true
-    //   console.log("popdata",this.props.navigator.pop())
-    // this.props.navigation.goBack(null)
+
+//     //   return true
+//     //   console.log("popdata",this.props.navigator.pop())
+//     // this.props.navigation.goBack(null)
       
-  }
+//   }
 //   resetapp(){
 //     BackHandler.exitApp()
 //     Actions.splash({type:'reset'})
@@ -99,7 +70,7 @@ class Login extends Component {
      firebaseRef.auth().signInWithEmailAndPassword(this.state.email, this.state.password).then(function(response) {
          console.log("res", response)
 
-         Actions.newsList()
+         Actions.newsList({datachange: "idchange"})
      })
      .catch(function(error) {
         console.log(error)
@@ -146,11 +117,12 @@ class Login extends Component {
     //     }
     //   }
     // );
-    AsyncStorage.setItem('my_key', 'my_value', () => {
-        this.setState({
-            keydata : email
-        })
-     });
+
+    // AsyncStorage.setItem('my_key', 'my_value', () => {
+    //     this.setState({
+    //         keydata : email
+    //     })
+    //  });
  }
  
  
