@@ -192,7 +192,7 @@ class Login extends Component {
             }}>
             <View style = {{
                 flex: 2,
-                justifyContent: 'center',
+               justifyContent: 'center',
                 alignItems: 'center'
             }}>
                   <Text style = {{
@@ -221,7 +221,7 @@ class Login extends Component {
                 color: '#565656',
                 marginTop: 15,
                 fontFamily: "SanFranciscoText-Light",
-                fontSize: 16
+                fontSize: 16    
             }}>Password</Text>
         <View style = {{flexDirection: 'row', flex: 1}}>
               <TextInput
@@ -282,7 +282,7 @@ class Login extends Component {
         </View>
         </ScrollView>
     );
-  }
+  }                
 }
 
 const styles = StyleSheet.create({

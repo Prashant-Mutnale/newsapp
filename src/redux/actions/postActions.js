@@ -7,7 +7,7 @@ export const fetchPosts = (idlistdatt, sortid) => dispatch =>{
     // let datacategory = iddatat
     let datachannel = idlistdatt
     console.log("got")
-    fetch("https://newsapi.org/v2/top-headlines?sources="+idlistdatt+"&sortBy="+sortid+"&apiKey=a2ce1ec1b28e498da9c7d295dd2c22a9")
+    fetch("https://newsapi.org/v2/top-headlines?sources="+idlistdatt+"&sortBy="+sortid+"&Api-Key=bc23d36970be6ce4d835ec5e803023514972c63a41dd9900d998b211266ee3aa")
     
     .then(res => res.json())
     .then(posts => 

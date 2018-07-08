@@ -29,7 +29,7 @@ class Posts extends Component {
             types: ['ArcAlt'],
             size: 100,
             color: "#FFFFFF",
-            isVisible: true      
+            isVisible: true
         }
         // this.getData = this.getData.bind(this)
     }
@@ -76,13 +76,13 @@ class Posts extends Component {
         <ScrollView>
 
       <View style={styles.container}>
-        
+
          {
              newslist ==="" || newslist== undefined ? null :
-           
+
             Object.values(newslist).map((items, i ) => {
                 return(
-                    <TouchableOpacity 
+                    <TouchableOpacity
                     key = {i}
                     style = {{
                         flex: 1,
@@ -107,7 +107,7 @@ class Posts extends Component {
                           flex: 2,
                           paddingLeft: 10
                       }}>
-                      <Text 
+                      <Text
                       numberOfLines={2}
                       style = {{
                             fontFamily: "SanFranciscoText-Bold",
@@ -115,7 +115,7 @@ class Posts extends Component {
                             fontSize: 22,
                             justifyContent: 'flex-start'
                         }}>{items.title}</Text>
-                          <Text 
+                          <Text
                           numberOfLines={1}
                           style = {{
                             fontFamily: "SanFranciscoText-Light",
@@ -123,7 +123,7 @@ class Posts extends Component {
                             fontSize: 12,
                             marginTop: 10,
                             justifyContent: 'flex-start'
-                        }}><Text 
+                        }}><Text
                         style = {{
                           fontWeight: 'bold'
                         }}>Author</Text>: {items.author}</Text>
@@ -132,7 +132,7 @@ class Posts extends Component {
                 )
             })
         }
-         
+
           {/* <TouchableOpacity style = {{
               flex: 1,
             //   backgroundColor: 'red',
@@ -158,7 +158,7 @@ class Posts extends Component {
               }}>18k People Talking about this</Text>
             </View>
           </TouchableOpacity> */}
-          
+
       </View>
       </ScrollView>
     );
@@ -193,13 +193,13 @@ function mapStateToProps(state) {
         return{
             postdata : state.posts.items
         }
-        
+
 
     // else {
     //     return {};
     //     }
-    
-  
+
+
     // console.log(state)
  }
  export default connect(mapStateToProps, {fetchPosts})(Posts);
